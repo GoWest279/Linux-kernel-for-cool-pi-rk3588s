@@ -67,6 +67,7 @@ imx274        Sony IMX274 sensor
 imx290        Sony IMX290 sensor
 imx319        Sony IMX319 sensor
 imx355        Sony IMX355 sensor
+imx477        Sony IMX477 sensor
 m5mols        Fujitsu M-5MOLS 8MP sensor
 mt9m001       mt9m001
 mt9m032       MT9M032 camera sensor
