@@ -23,6 +23,7 @@
 #include <media/media-entity.h>
 #include <media/v4l2-async.h>
 #include <media/v4l2-ctrls.h>
+#include <linux/v4l2-controls.h>
 #include <media/v4l2-subdev.h>
 #include <media/v4l2-fwnode.h>
 #include <linux/pinctrl/consumer.h>
@@ -87,7 +88,10 @@
 #define IMX477_REG_TEST_PATTERN	0x0600
 #define IMX477_TEST_PATTERN_ENABLE	0x1
 #define IMX477_TEST_PATTERN_DISABLE	0x0
-
+#define IMX477_TEST_PATTERN_SOLID_COLOR	1
+#define IMX477_TEST_PATTERN_COLOR_BARS	2
+#define IMX477_TEST_PATTERN_GREY_COLOR	3
+#define IMX477_TEST_PATTERN_PN9		4
 
 //
 #define IMX477_REG_VTS_H		0x0340
@@ -642,13 +646,19 @@ static const struct imx477_mode supported_modes[] = {
 static const s64 link_freq_menu_items[] = {
 	IMX477_LINK_FREQ_848,
 };
-
+static const int imx477_test_pattern_val[] = {
+	IMX477_TEST_PATTERN_DISABLE,
+	IMX477_TEST_PATTERN_COLOR_BARS,
+	IMX477_TEST_PATTERN_SOLID_COLOR,
+	IMX477_TEST_PATTERN_GREY_COLOR,
+	IMX477_TEST_PATTERN_PN9,
+};
 static const char * const imx477_test_pattern_menu[] = {
 	"Disabled",
-	"Vertical Color Bar Type 1",
-	"Vertical Color Bar Type 2",
-	"Vertical Color Bar Type 3",
-	"Vertical Color Bar Type 4"
+	"Color Bars",
+	"Solid Color",
+	"Grey Color Bars",
+	"PN9"
 };
 
 /* Write registers up to 4 at a time */
@@ -890,15 +900,17 @@ static int imx477_enum_frame_sizes(struct v4l2_subdev *sd,
 static int imx477_enable_test_pattern(struct imx477 *imx477, u32 pattern)
 {
 	u32 val;
-
+//	pr_info("Test pattern:%d\n", pattern);
 	if (pattern)
-		val = (pattern - 1) | IMX477_TEST_PATTERN_ENABLE;
+		//val = (pattern - 1) | IMX477_TEST_PATTERN_ENABLE;
+		val = pattern;// IMX477_TEST_PATTERN_ENABLE;
 	else
 		val = IMX477_TEST_PATTERN_DISABLE;
 
+	pr_info("Test pattern:%d %d\n", pattern, val);
 	return imx477_write_reg(imx477->client,
 				IMX477_REG_TEST_PATTERN,
-				IMX477_REG_VALUE_08BIT,
+				IMX477_REG_VALUE_16BIT,
 				val);
 }
 
