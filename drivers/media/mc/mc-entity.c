@@ -415,6 +415,7 @@ __must_check int __media_pipeline_start(struct media_entity *entity,
 
 	if (!pipe->streaming_count++) {
 		ret = media_graph_walk_init(&pipe->graph, mdev);
+		pr_err("mc-entity error:%d\n", ret);
 		if (ret)
 			goto error_graph_walk_start;
 	}
@@ -472,6 +473,7 @@ __must_check int __media_pipeline_start(struct media_entity *entity,
 				continue;
 
 			ret = entity->ops->link_validate(link);
+			pr_err("mc-entity link_validate error:%d\n", ret);
 			if (ret < 0 && ret != -ENOIOCTLCMD) {
 				dev_dbg(entity->graph_obj.mdev->dev,
 					"link validation failed for '%s':%u -> '%s':%u, error %d\n",

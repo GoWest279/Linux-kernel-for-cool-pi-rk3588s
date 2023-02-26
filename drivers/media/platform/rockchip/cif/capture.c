@@ -5228,7 +5228,7 @@ int rkcif_do_start_stream(struct rkcif_stream *stream, unsigned int mode)
 	if (stream->cur_stream_mode == RKCIF_STREAM_MODE_NONE) {
 		ret = media_pipeline_start(&node->vdev.entity, &dev->pipe.pipe);
 		if (ret < 0) {
-			v4l2_err(&dev->v4l2_dev, "start pipeline failed %d\n",
+			v4l2_err(&dev->v4l2_dev, "cif/capture.c start pipeline failed %d\n",
 				 ret);
 			goto pipe_stream_off;
 		}

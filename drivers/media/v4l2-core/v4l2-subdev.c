@@ -796,17 +796,22 @@ int v4l2_subdev_link_validate_default(struct v4l2_subdev *sd,
 	/* The width, height and code must match. */
 	if (source_fmt->format.width != sink_fmt->format.width
 	    || source_fmt->format.height != sink_fmt->format.height
-	    || source_fmt->format.code != sink_fmt->format.code)
-		return -EPIPE;
+	    || source_fmt->format.code != sink_fmt->format.code) {
+		pr_err("format mismatch:%d-%d %d-%d %d-%d\n", source_fmt->format.width,  sink_fmt->format.width,
+	    											  source_fmt->format.height, sink_fmt->format.height,
+	    											  source_fmt->format.code, sink_fmt->format.code);
+		return -EPIPE;	
+	}
 
 	/* The field order must match, or the sink field order must be NONE
 	 * to support interlaced hardware connected to bridges that support
 	 * progressive formats only.
 	 */
 	if (source_fmt->format.field != sink_fmt->format.field &&
-	    sink_fmt->format.field != V4L2_FIELD_NONE)
+	    sink_fmt->format.field != V4L2_FIELD_NONE) {
+		pr_err("filed mistmatch\n");
 		return -EPIPE;
-
+	}
 	return 0;
 }
 EXPORT_SYMBOL_GPL(v4l2_subdev_link_validate_default);
@@ -836,7 +841,7 @@ int v4l2_subdev_link_validate(struct media_link *link)
 	struct v4l2_subdev *sink;
 	struct v4l2_subdev_format sink_fmt, source_fmt;
 	int rval;
-
+	pr_err("Call v4l2_subdev_link_validate\n");
 	rval = v4l2_subdev_link_validate_get_format(
 		link->source, &source_fmt);
 	if (rval < 0)

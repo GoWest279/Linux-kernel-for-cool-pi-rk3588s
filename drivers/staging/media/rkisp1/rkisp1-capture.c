@@ -1012,7 +1012,7 @@ rkisp1_vb2_start_streaming(struct vb2_queue *queue, unsigned int count)
 
 	ret = media_pipeline_start(entity, &cap->rkisp1->pipe);
 	if (ret) {
-		dev_err(cap->rkisp1->dev, "start pipeline failed %d\n", ret);
+		dev_err(cap->rkisp1->dev, "rkisp1-capture start pipeline failed %d\n", ret);
 		goto err_pipe_disable;
 	}
 
@@ -1269,9 +1269,10 @@ static int rkisp1_capture_link_validate(struct media_link *link)
 
 	if (sd_fmt.format.height != cap->pix.fmt.height ||
 	    sd_fmt.format.width != cap->pix.fmt.width ||
-	    sd_fmt.format.code != fmt->mbus)
+	    sd_fmt.format.code != fmt->mbus) {
+		pr_err("rkisp1-capture.c format mistach\n");
 		return -EPIPE;
-
+		}
 	return 0;
 }
 
